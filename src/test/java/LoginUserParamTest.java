@@ -32,7 +32,7 @@ public class LoginUserParamTest {
     private final String buttonXpath;
     private final String page;
     private LoginPage loginPage;
-    private HomePage homePage;
+
 
     public LoginUserParamTest(String buttonXpath, String page) {
         this.buttonXpath = buttonXpath;
@@ -64,7 +64,6 @@ public class LoginUserParamTest {
         //options.setBinary("C:\\Users\\vssemenov\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe");
         driver = new ChromeDriver(options);
         loginPage = new LoginPage(driver);
-        homePage = new HomePage(driver);
     }
     @After
     public void cleanUp() {
@@ -80,7 +79,7 @@ public class LoginUserParamTest {
         driver.findElement(By.xpath(buttonXpath)).click();
         loginPage.inputLoginDataAndPressButton(driver,userEmail,userPassword);
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(homePage.getXpathCheckoutButtonText(driver)));
-        Assert.assertEquals("Оформить заказ", driver.findElement(homePage.getXpathCheckoutButtonText(driver)).getText());
+                .until(ExpectedConditions.elementToBeClickable(HomePage.getXpathCheckoutButtonText(driver)));
+        Assert.assertEquals("Оформить заказ", driver.findElement(HomePage.getXpathCheckoutButtonText(driver)).getText());
     }
 }

@@ -28,8 +28,6 @@ public class SwitchToConstructorParamTest {
     private String userEmail;
     private String userPassword;
     private LoginPage loginPage;
-    private HomePage homePage;
-    private PersonalAreaPage personalAreaPage;
     private final String buttonXpath;
 
 
@@ -60,8 +58,6 @@ public class SwitchToConstructorParamTest {
         //options.setBinary("C:\\Users\\vssemenov\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe");
         driver = new ChromeDriver(options);
         loginPage = new LoginPage(driver);
-        personalAreaPage = new PersonalAreaPage(driver);
-        homePage = new HomePage(driver);
     }
     @After
     public void cleanUp() {
@@ -73,16 +69,16 @@ public class SwitchToConstructorParamTest {
     @Test
     public void checkParamSwitchToConstructorTest() {
         driver.manage().window().maximize();
-        loginPage.openAuthorizationPage();
+        driver.get(LoginPage.openAuthorizationPage());
         loginPage.inputLoginDataAndPressButton(driver,userEmail,userPassword);
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(homePage.getXpathCheckoutButtonText(driver)));
-        driver.findElement(By.xpath(homePage.getXpathPersonalAreaButton())).click();
+                .until(ExpectedConditions.elementToBeClickable(HomePage.getXpathCheckoutButtonText(driver)));
+        driver.findElement(By.xpath(HomePage.getXpathPersonalAreaButton())).click();
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(personalAreaPage.getXpathAccountText()));
+                .until(ExpectedConditions.elementToBeClickable(PersonalAreaPage.getXpathAccountText()));
         driver.findElement(By.xpath(buttonXpath)).click();
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(homePage.getXpathTextHomePage()));
-        Assert.assertEquals("Соберите бургер",driver.findElement(homePage.getXpathTextHomePage()).getText());
+                .until(ExpectedConditions.elementToBeClickable(HomePage.getXpathTextHomePage()));
+        Assert.assertEquals("Соберите бургер",driver.findElement(HomePage.getXpathTextHomePage()).getText());
     }
 }

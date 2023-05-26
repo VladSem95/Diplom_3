@@ -61,8 +61,8 @@ public class HomePage {
     public static void clickLogin(WebDriver driver) {
         driver.findElement(LOGIN_HOME_PAGE_BUTTON).click();
     }
-    public void openHomePage() {
-        driver.get(HOME_PAGE_URL);
+    public static String openHomePage() {
+        return HOME_PAGE_URL;
     }
 
 }

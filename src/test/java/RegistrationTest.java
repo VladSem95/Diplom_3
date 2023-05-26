@@ -17,10 +17,7 @@ import static org.hamcrest.Matchers.containsString;
 public class RegistrationTest {
     private WebDriver driver;
     private RegistrationPage registrationPage;
-    private String clientBearerToken;
     private UserClient userClient;
-    private ValidatableResponse login;
-    private Faker faker;
     private String userName;
     private String userEmail;
     private String userPassword;
@@ -28,7 +25,7 @@ public class RegistrationTest {
 
     @Before
     public void setUp(){
-        faker = new Faker();
+        Faker faker = new Faker();
         userName = faker.name().firstName() + faker.name().lastName();
         userEmail = RandomStringUtils.randomAlphanumeric(10) + "@yandex.ru";
         userPassword = faker.toString();
@@ -45,11 +42,12 @@ public class RegistrationTest {
     @After
     public void cleanUp() {
             try {
-                login = userClient.login(userEmail,userPassword);
+                ValidatableResponse login = userClient.login(userEmail, userPassword);
 
-                clientBearerToken = login.extract().path("accessToken");
+                String clientBearerToken = login.extract().path("accessToken");
                 clientBearerToken = clientBearerToken.replace("Bearer ", "");
                 userClient.delete(clientBearerToken);
+                driver.quit();
             }catch(NullPointerException Exception){
                 driver.quit();
         }
@@ -58,26 +56,24 @@ public class RegistrationTest {
     public void checkRegistrationSuccessTest() {
 
         LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
 
-        homePage.openHomePage();
+        driver.get(HomePage.openHomePage());
         HomePage.clickLogin(driver);
         loginPage.clickRegistration(driver);
         registrationPage.inputRegistrationDataAndPressButton(driver, userName, userEmail, userPassword);
         loginPage.waitLoadInputButton();
         MatcherAssert.assertThat(loginPage.getLoginTextButton(driver),containsString("Войти"));
-        driver.quit();
+
     }
     @Test
     public void checkRegistrationWithIncorrectPassword() {
         driver.manage().window().maximize();
         LoginPage loginPage = new LoginPage(driver);
-        HomePage homePage = new HomePage(driver);
 
         userPassword = RandomStringUtils.randomAlphanumeric(5);
 
-        homePage.openHomePage();
-        homePage.clickLogin(driver);
+        driver.get(HomePage.openHomePage());
+        HomePage.clickLogin(driver);
         loginPage.clickRegistration(driver);
         registrationPage.inputRegistrationDataAndPressButton(driver, userName, userEmail, userPassword);
         registrationPage.waitLoadSmallTextError();

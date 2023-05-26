@@ -17,7 +17,7 @@ import java.time.Duration;
 @RunWith(Parameterized.class)
 public class JumpToTabParamTest {
     private WebDriver driver;
-    private HomePage homePage;
+
     private final By sectionConstructorTab;
     private final By sectionName;
     private final By neighboringSection;
@@ -49,7 +49,6 @@ public class JumpToTabParamTest {
         //Настройка для Яндекс браузера
         //options.setBinary("C:\\Users\\vssemenov\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe");
         driver = new ChromeDriver(options);
-        homePage = new HomePage(driver);
     }
     @After
     public void cleanUp(){
@@ -58,8 +57,8 @@ public class JumpToTabParamTest {
     @Test
     public void checkJumpToSectionTest(){
         driver.manage().window().maximize();
-        homePage.openHomePage();
-        //клик по соседнему элементу, чтобы усмотреть кликабельность секции "Булки" при открытии стартовой страницы
+        driver.get(HomePage.openHomePage());
+        //клик по соседнему элементу, чтобы учесть НЕкликабельность секции "Булки" при открытии стартовой страницы
         driver.findElement(neighboringSection).click();
         new WebDriverWait(driver, Duration.ofSeconds(3));
         driver.findElement(sectionConstructorTab).click();

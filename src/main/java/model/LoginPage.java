@@ -28,15 +28,15 @@ public class LoginPage {
     public LoginPage(WebDriver driver) {
         this.driver = driver;
     }
-    public By getLoginText(){
+    public static By getLoginText(){
         return LOGIN_TEXT;
     }
     public String getLoginTextButton(WebDriver driver) {
         String textButton = driver.findElement(INPUT_BUTTON).getText();
         return textButton;
     }
-    public void openAuthorizationPage(){
-        driver.get(LOGIN_PAGE_URL);
+    public static String openAuthorizationPage(){
+        return LOGIN_PAGE_URL;
     }
 
     public void waitLoadInputButton(){

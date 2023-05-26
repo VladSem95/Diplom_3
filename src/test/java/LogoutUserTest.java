@@ -25,16 +25,14 @@ public class LogoutUserTest {
     private String userEmail;
     private String userPassword;
     private LoginPage loginPage;
-    private HomePage homePage;
-    private PersonalAreaPage personalAreaPage;
     @Before
     public void setUp(){
         faker = new Faker();
         String userName = (faker.name().firstName() + faker.name().lastName());
         userEmail = RandomStringUtils.randomAlphanumeric(10) + "@yandex.ru";
         userPassword = RandomStringUtils.randomAlphanumeric(6);
-
         userClient = new UserClient();
+        loginPage = new LoginPage(driver);
         userClient.create(userEmail,userPassword, userName);
         //Настройка для Яндекс браузера
         //System.setProperty("webdriver.chrome.driver","C:\\Users\\vssemenov\\Desktop\\yandexdriver.exe");
@@ -43,9 +41,7 @@ public class LogoutUserTest {
         //Настройка для Яндекс браузера
         //options.setBinary("C:\\Users\\vssemenov\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe");
         driver = new ChromeDriver(options);
-        loginPage = new LoginPage(driver);
-        personalAreaPage = new PersonalAreaPage(driver);
-        homePage = new HomePage(driver);
+
     }
     @After
     public void cleanUp() {
@@ -57,17 +53,17 @@ public class LogoutUserTest {
     @Test
     public void checkLogoutUserTest(){
         driver.manage().window().maximize();
-        loginPage.openAuthorizationPage();
+        driver.get(LoginPage.openAuthorizationPage());
         loginPage.inputLoginDataAndPressButton(driver,userEmail,userPassword);
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(homePage.getXpathCheckoutButtonText(driver)));
-        driver.findElement(By.xpath(homePage.getXpathPersonalAreaButton())).click();
+                .until(ExpectedConditions.elementToBeClickable(HomePage.getXpathCheckoutButtonText(driver)));
+        driver.findElement(By.xpath(HomePage.getXpathPersonalAreaButton())).click();
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(personalAreaPage.getXpathAccountText()));
-        driver.findElement(By.xpath(personalAreaPage.getXpathLogoutUser())).click();
+                .until(ExpectedConditions.elementToBeClickable(PersonalAreaPage.getXpathAccountText()));
+        driver.findElement(By.xpath(PersonalAreaPage.getXpathLogoutUser())).click();
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(loginPage.getLoginText()));
-        String loginText = driver.findElement(loginPage.getLoginText()).getText();
+                .until(ExpectedConditions.elementToBeClickable(LoginPage.getLoginText()));
+        String loginText = driver.findElement(LoginPage.getLoginText()).getText();
         Assert.assertEquals("Вход",loginText);
     }
 }

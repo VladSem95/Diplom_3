@@ -25,7 +25,6 @@ public class TransitionPersonalAreaTest {
     private String userEmail;
     private String userPassword;
     private LoginPage loginPage;
-    private HomePage homePage;
     @Before
     public void setUp(){
         faker = new Faker();
@@ -54,13 +53,12 @@ public class TransitionPersonalAreaTest {
     @Test
     public void checkPersonalAreaTest(){
         driver.manage().window().maximize();
-        homePage = new HomePage(driver);
-        homePage.openHomePage();
-        driver.findElement(By.xpath(homePage.getXpathLoginHomePageButton())).click();
+        driver.get(HomePage.openHomePage());
+        driver.findElement(By.xpath(HomePage.getXpathLoginHomePageButton())).click();
         loginPage.inputLoginDataAndPressButton(driver,userEmail,userPassword);
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(By.xpath(homePage.getXpathPersonalAreaButton())));
-        driver.findElement(By.xpath(homePage.getXpathPersonalAreaButton())).click();
+                .until(ExpectedConditions.elementToBeClickable(By.xpath(HomePage.getXpathPersonalAreaButton())));
+        driver.findElement(By.xpath(HomePage.getXpathPersonalAreaButton())).click();
         new WebDriverWait(driver, Duration.ofSeconds(3))
                 .until(ExpectedConditions.elementToBeClickable(PersonalAreaPage.getXpathAccountText()));
         Assert.assertEquals(PersonalAreaPage.getPersonalAreaText(),driver.findElement(PersonalAreaPage.getXpathAccountText()).getText());
