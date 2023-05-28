@@ -16,6 +16,18 @@ public class HomePage {
     private final static By XPATH_SECTION_BUNS = By.xpath(".//h2[text()='Булки']");
     private final static By XPATH_SECTION_SAUCES = By.xpath(".//h2[text()='Соусы']");
     private final static By XPATH_SECTION_FILLINGS = By.xpath(".//h2[text()='Начинки']");
+    private final static By ACTIVE_TAB_BUNS = By.xpath(".//div[@class = 'tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect']/span[text() = 'Булки']");
+    private final static By ACTIVE_TAB_SAUCE = By.xpath(".//div[@class = 'tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect']/span[text() = 'Соусы']");
+    private final static By ACTIVE_TAB_FILLINGS = By.xpath(".//div[@class = 'tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect']/span[text() = 'Начинки']");
+    public static By getActiveTabBuns(){
+        return ACTIVE_TAB_BUNS;
+    }
+    public static By getActiveTabSauce(){
+        return ACTIVE_TAB_SAUCE;
+    }
+    public static By getActiveTabFillings(){
+        return ACTIVE_TAB_FILLINGS;
+    }
     public static By getXpathTabBuns(){
         return XPATH_TAB_BUNS;
     }

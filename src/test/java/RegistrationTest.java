@@ -41,15 +41,14 @@ public class RegistrationTest {
     }
     @After
     public void cleanUp() {
-            try {
-                ValidatableResponse login = userClient.login(userEmail, userPassword);
-
-                String clientBearerToken = login.extract().path("accessToken");
-                clientBearerToken = clientBearerToken.replace("Bearer ", "");
-                userClient.delete(clientBearerToken);
-                driver.quit();
-            }catch(NullPointerException Exception){
-                driver.quit();
+        driver.quit();
+        ValidatableResponse login = userClient.login(userEmail, userPassword);
+        String clientBearerToken = login.extract().path("accessToken");
+        try {
+            clientBearerToken = clientBearerToken.replace("Bearer ", "");
+            userClient.delete(clientBearerToken);
+        }
+        catch (NullPointerException ignore){
         }
     }
     @Test

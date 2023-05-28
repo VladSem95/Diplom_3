@@ -14,30 +14,32 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static org.hamcrest.Matchers.is;
+
 @RunWith(Parameterized.class)
 public class JumpToTabParamTest {
     private WebDriver driver;
 
     private final By sectionConstructorTab;
-    private final By sectionName;
     private final By neighboringSection;
     private final String expectedName;
+    private final By activeTab;
 
 
-    public JumpToTabParamTest(By sectionConstructorTab, By sectionName, String expectedName, By neighboringSection) {
+    public JumpToTabParamTest(By sectionConstructorTab, String expectedName, By neighboringSection, By activeTab) {
         this.sectionConstructorTab = sectionConstructorTab;
-        this.sectionName = sectionName;
         this.neighboringSection = neighboringSection;
         this.expectedName = expectedName;
+        this.activeTab = activeTab;
     }
 
 
     @Parameterized.Parameters
     public static Object[][] getTestParameters(){
         return new Object[][]{
-                {HomePage.getXpathTabBuns(),HomePage.getXpathSectionBuns(),"Булки",HomePage.getXpathTabSauces()},
-                {HomePage.getXpathTabSauces(),HomePage.getXpathSectionSauces(),"Соусы",HomePage.getXpathTabFillings()},
-                {HomePage.getXpathTabFillings(),HomePage.getXpathSectionFillings(),"Начинки",HomePage.getXpathTabSauces()}
+                {HomePage.getXpathTabBuns(),"Булки",HomePage.getXpathTabSauces(),HomePage.getActiveTabBuns()},
+                {HomePage.getXpathTabSauces(),"Соусы",HomePage.getXpathTabFillings(),HomePage.getActiveTabSauce()},
+                {HomePage.getXpathTabFillings(),"Начинки",HomePage.getXpathTabSauces(),HomePage.getActiveTabFillings()}
         };
     }
     @Before
@@ -59,13 +61,10 @@ public class JumpToTabParamTest {
         driver.manage().window().maximize();
         driver.get(HomePage.openHomePage());
         //клик по соседнему элементу, чтобы учесть НЕкликабельность секции "Булки" при открытии стартовой страницы
+        //в данном тесте можно проверить только активность табы, все элементы из списка у нас поумполчанию visibillity = true
         driver.findElement(neighboringSection).click();
-        new WebDriverWait(driver, Duration.ofSeconds(3));
         driver.findElement(sectionConstructorTab).click();
-        new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(sectionName));
-        String actualName = driver.findElement(sectionName).getText();
+        String actualName = driver.findElement(activeTab).getText();
         Assert.assertEquals(expectedName, actualName);
-
     }
 }
